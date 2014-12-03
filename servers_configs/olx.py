@@ -23,7 +23,7 @@ class OlxSearchEngine(SearchEngine):
         # category OR querystr must be set by user
         self.category   = ""
         # TODO:unfinished!
-        self.querystr   = "/oferty/q-"
+        self.querystr   = "" #"/oferty/q-"
 
         self.sort_by    = "search[order]"
         self.price_from = "search[filter_float_price:from]"
@@ -37,6 +37,7 @@ class OlxSearchEngine(SearchEngine):
         # user settings override/append default_config settings:
         try:
             setattr(self, "category", options.pop("category"))
+            options.pop("querystr")
             self.querystr = ""
         except KeyError:
             setattr(self, "querystr", getattr(self, "querystr") + options.pop("querystr"))
@@ -50,7 +51,14 @@ class OlxSearchEngine(SearchEngine):
         # TODO: Fix and move to proper place.
         self.incl = [fil.strip() for fil in filters["include"].replace('"', '').replace('\n','').split(',')]
         self.excl = [fil.strip() for fil in filters["exclude"].replace('"', '').replace('\n','').split(',')]
-
+        try:
+            self.incl.remove('')
+        except ValueError:
+            pass
+        try:
+            self.excl.remove('')
+        except ValueError:
+            pass
         #image
         #description
 

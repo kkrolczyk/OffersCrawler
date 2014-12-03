@@ -31,10 +31,9 @@ def main(Engine, options, filters, output):
     elif output == "html":
         FILENAME = "/tmp/stuff_parser.html"
 
-        with open(FILENAME, "w") as file_:
+        with open(FILENAME, "wb") as file_:
             file_.truncate()
-            file_.write("<html><br>\n")
-            file_.write("<table>\n")
+            file_.write(bytes("""<html><br>\n <table>\n""",'utf-8'))
             template = """
             \n<tr>
             <td><img width=94 height=72 src={}></img></td>
@@ -44,12 +43,16 @@ def main(Engine, options, filters, output):
             """
                 #for key, val in dictionary.items():??
             for dictionary in results:
-                file_.write(template.format(
-                    dictionary["img"],
-                    dictionary["title"],
-                    dictionary["price"],
-                    str(dictionary["link"])))
-            file_.write("\n</table></html>")
+                
+                file_.write(bytes(template.format(
+                    dictionary["img"],#.decode('utf8', 'ignore').encode('utf8', 'replace'),
+                    dictionary["title"],#.decode('utf8', 'ignore').encode('utf8', 'replace'),
+                    dictionary["price"],#.decode('utf8', 'ignore').encode('utf8', 'replace'),
+                    dictionary["link"],#.encode("utf-8").encode('utf8', 'replace')
+                    ), 'utf-8'))
+                    
+
+            file_.write(bytes("\n</table></html>", 'utf-8'))
             logging.info("file writer exported results to: file://" + FILENAME)
     else:
         logging.debug("Error.")

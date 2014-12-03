@@ -70,6 +70,9 @@ class SearchEngine(object):
             flag = True
         if any( [(x in haystack) for x in self.excl] ):
             flag = False
+        #print (flag)
+        #print ([ "i:"+x for x in self.incl if x in haystack])
+        #print ([ "e:"+x for x in self.excl if x in haystack])
         return flag
 
     def run(self):
