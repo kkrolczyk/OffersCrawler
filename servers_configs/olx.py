@@ -1,10 +1,14 @@
-# base www + category + ? + built query
-
 from .base_searcher import SearchEngine
 import time
 
 
-class OlxSearchEngine(SearchEngine):
+class Engine(SearchEngine):
+    """ OLX www rule:
+          a) base_www/offers/q-QUERYSTR/? (global search)
+          b) base_www/offers/q-QUERYSTR/?&BUILT_QUERY (global search with parameters)
+          c) base_www/CATEGORY1/CATEGORY2/.../?BUILT_QUERY (in category browse with parameters)
+          d) base_www/CATEGORY1/CATEGORY2/.../q-QUERYSTR/? (in category search)
+    """
 
     def __init__(self, options, filters):
         #super().__init__(options, filters)
@@ -47,6 +51,9 @@ class OlxSearchEngine(SearchEngine):
             #print (key)
             #pass
             setattr(self, key, getattr(self, key) + '=' + options[key])
+            ## idea here is to obtain from {a:x} (default key names) and {a:1} (config file) => {x:1}
+            ## pitfalls = different dicts in defaults and config file (set() & set() could do the work but...)
+            ## we cant izip_longest two dictionaries as well
 
         # TODO: Fix and move to proper place.
         self.incl = [fil.strip() for fil in filters["include"].replace('"', '').replace('\n','').split(',')]
